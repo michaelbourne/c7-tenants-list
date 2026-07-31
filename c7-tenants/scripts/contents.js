@@ -11,7 +11,7 @@ function initializeC7Tenants() {
     let searchEnabled = false;
     let urlObserver = null;
 
-    const targetString = '#root > div > div:has(div > form)';
+    const targetString = '#root > div > div:has(div > form div[data-testid="inline-search"])';
 
     function getColorMode() {
         const cookieMode = document.cookie.split('; ').find(row => row.startsWith('color-mode='))?.split('=')[1];
@@ -368,7 +368,7 @@ function initializeC7Tenants() {
     }
 
     function initialize() {
-        if (isInitialized || !isEnabled) return;
+        if (isInitialized || !isEnabled || !isTenantPage()) return;
         isInitialized = true;
         
         setupXHRInterceptor();
@@ -386,6 +386,9 @@ function initializeC7Tenants() {
                     const hideStyle = document.querySelector('#c7-search-container-hide-style');
                     if (hideStyle) hideStyle.remove();
                     targetElement.style.width = '875px'; // Set width here
+                } else {
+                  // Remove width if present and was not removed
+                  targetElement.style.width = '';
                 }
                 // If searchEnabled is false, the injected CSS handles hiding, no width set
 
